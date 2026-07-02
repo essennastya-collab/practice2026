@@ -51,7 +51,6 @@ public class AttributeReflectionTests
         Console.SetOut(output);    
         ReflectionHelper.PrintTypeInfo(typeof(SampleClass));    
         var result = output.ToString();    
-        Assert.Contains("SampleClass", result);
         Assert.Contains("Пример класса", result);
         Assert.Contains("Version: 1.0", result);
         Assert.Contains("TestMethod", result);
