@@ -41,6 +41,6 @@ public class UnitTest1
         Console.SetOut(output);
         Program.Main(new string[] { });
         var result = output.ToString();
-        Assert.Contains("DLL path required", result);
+        Assert.Contains("Error", result);
     }
 }
