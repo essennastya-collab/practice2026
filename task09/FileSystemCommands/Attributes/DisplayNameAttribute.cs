@@ -1,6 +1,6 @@
 using System;
 
-namespace task07;
+namespace FileSystemCommands.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property)]
 public class DisplayNameAttribute : Attribute

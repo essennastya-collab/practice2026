@@ -1,7 +1,10 @@
 ﻿using System.IO;
 using System.Linq;
 using CommandLib;
+using FileSystemCommands.Attributes; 
 namespace FileSystemCommands;
+[DisplayName("Определение размера каталога")]
+[Version(1,0)]
 public class DirectorySizeCommand : ICommand
 {
     private readonly string _path;
