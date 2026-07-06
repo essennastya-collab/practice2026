@@ -1,10 +1,8 @@
- using System.IO;
+using System.IO;
 using System.Collections.Generic;
 using CommandLib;
-using FileSystemCommands.Attributes; 
+
 namespace FileSystemCommands;
-[DisplayName("Нахождение файлов по маске")]
-[Version(1,0)]
 
 public class FindFilesCommand : ICommand
 {
