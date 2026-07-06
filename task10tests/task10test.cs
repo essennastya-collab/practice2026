@@ -51,9 +51,8 @@ public class UnitTest1
         {
             ExecutionLog.Sequence.Clear();
             var host = new PluginManager.PluginHost();
-            var assemblyDir = Path.GetDirectoryName(typeof(BasePlugin).Assembly.Location)!;
-
-            host.LoadFromDirectory(assemblyDir);
+            
+            host.LoadFromTypes(new[] { typeof(BasePlugin), typeof(MiddlePlugin), typeof(FinalPlugin) });
             host.ExecuteAll();
 
             Assert.Equal(new[] { "Base", "Middle", "Final" }, ExecutionLog.Sequence);
@@ -140,6 +139,7 @@ public class UnitTest1
             
             var invalidDll = Path.Combine(tempDir, "invalid.dll");
             File.WriteAllText(invalidDll, "Not a DLL");
+            
             var validDll = typeof(BasePlugin).Assembly.Location;
             var destDll = Path.Combine(tempDir, "valid.dll");
             File.Copy(validDll, destDll);
