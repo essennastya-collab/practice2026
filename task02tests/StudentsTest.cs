@@ -62,4 +62,11 @@ public class StudentServiceTests
         Assert.Equal(2, result["ФИТ"].Count());
         Assert.Single(result["Экономика"]);
     }
+    [Fact]
+    public void GetFacultyWithHighestAverageGrade_EmptyList_ReturnsNull()
+    {
+        var emptyService = new StudentService(new List<Student>());
+        var result = emptyService.GetFacultyWithHighestAverageGrade();
+        Assert.Null(result);
+    }
 }
