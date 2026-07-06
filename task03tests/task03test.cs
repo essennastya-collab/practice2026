@@ -48,4 +48,10 @@ public class IteratorTests
         var result = collection.FilterAndSort(x => x > 1, x => x).ToList();
         Assert.Equal(new[] { 2, 3 }, result);
     }
+    [Fact]
+    public void GenerateSequence_NegativeCount_ThrowsArgumentOutOfRangeException()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => 
+            CustomCollection<int>.GenerateSequence(0, -1).ToList());
+    }
 }
