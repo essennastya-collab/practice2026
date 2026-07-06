@@ -41,6 +41,8 @@ public class UnitTest1
         Console.SetOut(output);
         Program.Main(new string[] { });
         var result = output.ToString();
-        Assert.Contains("Error", result);
+    
+        Assert.Contains("Ошибка", result);
+        Assert.Contains("путь к DLL не указан", result);
     }
 }
