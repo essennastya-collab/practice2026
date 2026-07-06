@@ -12,11 +12,39 @@ public class Program
     {
         if (args.Length == 0)
         {
-            Console.WriteLine("Error");
+            Console.WriteLine("Ошибка: путь к DLL не указан.");
+            Console.WriteLine("Использование: CommandRunner <путь-к-dll>");
             return;
         }
 
-        Assembly assembly = Assembly.LoadFrom(args[0]);
+        string dllPath = args[0];
+
+        if (!File.Exists(dllPath))
+        {
+            Console.WriteLine($"Ошибка: файл не найден: {dllPath}");
+            return;
+        }
+
+        Assembly assembly;
+        try
+        {
+            assembly = Assembly.LoadFrom(dllPath);
+        }
+        catch (BadImageFormatException)
+        {
+            Console.WriteLine($"Ошибка: файл не является корректной .NET сборкой: {dllPath}");
+            return;
+        }
+        catch (FileLoadException ex)
+        {
+            Console.WriteLine($"Ошибка: не удалось загрузить сборку: {ex.Message}");
+            return;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка: непредвиденная ошибка при загрузке сборки: {ex.Message}");
+            return;
+        }
 
         string dir = Path.Combine(Path.GetTempPath(), "Dir");
         Directory.CreateDirectory(dir);
@@ -25,7 +53,14 @@ public class Program
         File.WriteAllText(Path.Combine(dir, "file3.txt"), "README");
 
         var commandTypes = assembly.GetTypes()
-            .Where(t => typeof(ICommand).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+            .Where(t => typeof(ICommand).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+            .ToList();
+
+        if (commandTypes.Count == 0)
+        {
+            Console.WriteLine("Предупреждение: в сборке не найдено команд.");
+            return;
+        }
 
         foreach (var type in commandTypes)
         {
@@ -42,17 +77,24 @@ public class Program
                         arguments[i] = "*.txt";
                 }
 
-                var instance = (ICommand)Activator.CreateInstance(type, arguments)!;
-                instance.Execute();
-
-                Console.WriteLine($"\nExecuted: {type.Name}");
-                foreach (var prop in type.GetProperties())
+                try
                 {
-                    var value = prop.GetValue(instance);
-                    if (value != null)
+                    var instance = (ICommand)Activator.CreateInstance(type, arguments)!;
+                    instance.Execute();
+
+                    Console.WriteLine($"\nВыполнена команда: {type.Name}");
+                    foreach (var prop in type.GetProperties())
                     {
-                        Console.WriteLine($"  {prop.Name}: {value}");
+                        var value = prop.GetValue(instance);
+                        if (value != null)
+                        {
+                            Console.WriteLine($"  {prop.Name}: {value}");
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при выполнении команды {type.Name}: {ex.Message}");
                 }
             }
         }
