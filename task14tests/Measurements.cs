@@ -128,19 +128,18 @@ public class Measurements
 
     private static void PlotResults(List<(int Threads, double Time)> results, double step)
     {
-        var plt = new ScottPlot.Plot(800, 600);
+        var plt = new ScottPlot.Plot();
 
         double[] threads = results.Select(r => (double)r.Threads).ToArray();
         double[] times = results.Select(r => r.Time).ToArray();
 
-        plt.AddScatterPoints(threads, times, color: System.Drawing.Color.Blue, markerSize: 10);
-        plt.AddScatterLines(threads, times, color: System.Drawing.Color.Blue);
-
+        plt.Add.Scatter(threads, times);
+    
         plt.Title($"Execution Time vs Thread Count\n(step = {step:E1}, sin(x) on [-100, 100])");
         plt.XLabel("Number of Threads");
         plt.YLabel("Execution Time (ms)");
 
-        plt.SaveFig("threads_performance.png");
+        plt.SavePng("threads_performance.png", 800, 600);
     }
 
     private static (double MultiTime, double SingleTime, double Speedup) CompareWithSingleThread(double step, int optimalThreads)
