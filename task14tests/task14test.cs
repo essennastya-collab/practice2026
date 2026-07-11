@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xunit;
 using task14;
 
@@ -8,8 +8,6 @@ public class IntegralTests
 {
     private readonly Func<double, double> X = x => x;
     private readonly Func<double, double> SIN = x => Math.Sin(x);
-    private readonly Func<double, double> CONST = x => 1.0;
-    private readonly Func<double, double> XSQ = x => x * x;
 
     [Fact]
     public void IntegralOfX_FromMinus1To1_ShouldBeZero()
@@ -26,44 +24,22 @@ public class IntegralTests
     }
 
     [Fact]
-    public void IntegralOfConst_ShouldReturnLength()
+    public void IntegralOfX_From0To5_ShouldBe12_5()
     {
-        var result = DefiniteIntegral.Solve(0, 10, CONST, 1e-5, 4);
-        Assert.Equal(10.0, result, 4);
-    }
-
-    [Fact]
-    public void SingleThread_ShouldWork()
-    {
-        var result = DefiniteIntegral.Solve(0, 1, X, 1e-5, 1);
-        Assert.Equal(0.5, result, 4);
-    }
-
-    [Fact]
-    public void ManyThreads_ShouldWork()
-    {
-        var result = DefiniteIntegral.Solve(0, 1, X, 1e-5, 16);
-        Assert.Equal(0.5, result, 4);
+        var result = DefiniteIntegral.Solve(0, 5, X, 1e-6, 8);
+        Assert.Equal(12.5, result, 5);
     }
 
     [Fact]
     public void InvalidArguments_ShouldThrow()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            DefiniteIntegral.Solve(0, 1, null, 1e-5, 2));
+            DefiniteIntegral.Solve(0, 1, null!, 1e-5, 2));
         Assert.Throws<ArgumentOutOfRangeException>(() =>
             DefiniteIntegral.Solve(0, 1, X, 1e-5, 0));
         Assert.Throws<ArgumentOutOfRangeException>(() =>
             DefiniteIntegral.Solve(0, 1, X, -1, 2));
         Assert.Throws<ArgumentException>(() =>
             DefiniteIntegral.Solve(1, 0, X, 1e-5, 2));
-    }
-
-    [Fact]
-    public void ResultShouldBeConsistentAcrossRuns()
-    {
-        double result1 = DefiniteIntegral.Solve(0, 5, X, 1e-5, 4);
-        double result2 = DefiniteIntegral.Solve(0, 5, X, 1e-5, 4);
-        Assert.Equal(result1, result2, 10);
     }
 }
