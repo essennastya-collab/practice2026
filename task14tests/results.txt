@@ -1,0 +1,23 @@
+Definite integral of sin(x) on [-100, 100]
+
+1. Optimal step size: 1,0E-001
+   Explanation: the integration step that provides 1e-4 accuracy
+   with minimal execution time.
+
+2. Optimal thread count: 1
+   Explanation: the number of threads that achieves minimal
+   execution time of the Solve function for the chosen step.
+
+3. Multithreaded version execution time: 0,37 ms
+   Explanation: average time over 10 runs
+   of the Solve function with 1 threads.
+
+4. Single-threaded version execution time: 0,02 ms
+   Explanation: average time over 10 runs
+   of the SolveSingleThreaded function (without using threads).
+
+5. Multithreaded version speedup: 0,06x
+   Explanation: the multithreaded version is 0,06 times faster
+   than the single-threaded version. Performance difference: -93,9%
+
+Criterion not met: additional optimization is required.
