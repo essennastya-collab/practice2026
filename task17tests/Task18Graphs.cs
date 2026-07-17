@@ -74,7 +74,7 @@ public class RoundRobinProgressGraph
         }
 
         PlotProgressGraph(progressLog);
-        _output.WriteLine("✓ График сохранен: roundrobin_progress_graph.png\n");
+        _output.WriteLine("График сохранен: roundrobin_progress_graph.png\n");
     }
 
     private void PlotProgressGraph(ConcurrentBag<(double TimeMs, int CommandId, double ProgressPercent)> progressLog)
