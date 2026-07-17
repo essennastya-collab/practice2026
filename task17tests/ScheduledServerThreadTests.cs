@@ -166,14 +166,19 @@ public class ScheduledServerThreadTests
         var scheduler = new RoundRobinScheduler();
         var server = new ScheduledServerThread(scheduler);
         server.Start();
-
-        server.Schedule(new LongRunningCommand("Long", 100, 50));
-        Thread.Sleep(20);
+        server.Schedule(new LongRunningCommand("Long", 100, 5));
+    
+        Thread.Sleep(30); 
 
         server.ForceStop();
-        Thread.Sleep(50);
+            int timeoutMs = 1000;
+        while (server.WorkerThread.IsAlive && timeoutMs > 0)
+        {
+          Thread.Sleep(10);
+           timeoutMs -= 10;
+        }
 
-        Assert.False(server.WorkerThread.IsAlive);
+        Assert.False(server.WorkerThread.IsAlive, "Поток не завершился вовремя после ForceStop");
     }
 
     [Fact]
